@@ -41,9 +41,6 @@ kiwi_ridesharing-run
 
 # Install
 
-Go to `https://github.com/{group}/kiwi_ridesharing` to see the project, manage issues,
-setup you ssh public key, ...
-
 Create a python3 virtualenv and activate it:
 
 ```bash
@@ -54,7 +51,7 @@ deactivate; virtualenv -ppython3 ~/venv ; source ~/venv/bin/activate
 Clone the project and install it:
 
 ```bash
-git clone git@github.com:{group}/kiwi_ridesharing.git
+git clone https://github.com/moe221/kiwi_ridesharing
 cd kiwi_ridesharing
 pip install -r requirements.txt
 make clean install test                # install and test
