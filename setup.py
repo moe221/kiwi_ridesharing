@@ -7,7 +7,10 @@ requirements = [x.strip() for x in content if 'git+' not in x]
 
 setup(name='kiwi_ridesharing',
       version="1.0",
-      description="Project Description",
+      description="""
+      Kiwi is a ride-sharing startup based in New Zealand -
+      Their goal is to grow in the competitive market
+      """,
       packages=find_packages(),
       install_requires=requirements,
       test_suite='tests',

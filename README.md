@@ -1,13 +1,21 @@
 # Data analysis
-- Document here the project: kiwi_ridesharing
-- Description: Project Description
-- Data Source:
-- Type of analysis:
 
-Please document the project the better you can.
+- Description:
+    Kiwi is a fictional ride-sharing startup based in New Zealand -
+    Their goal is to grow in the competitive market. This project includes all the
+    packages, and steps used to analyze Kiwi's current status and provide recommendations
+    on how to best expand their business.
+
+- Data Source:
+  Kiwi provided us access to its Data warehouse which contains these three tables:
+  - driver_ids
+  - ride_ids
+  - ride_timestamp
+
+- Type of analysis:
+  EDA, Regression, Clustering, NLP
 
 # Startup the project
-
 The initial setup.
 
 Create virtualenv and install the project:
@@ -20,19 +28,6 @@ deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
 Unittest test:
 ```bash
 make clean install test
-```
-
-Check for kiwi_ridesharing in gitlab.com/{group}.
-If your project is not set please add it:
-
-- Create a new project on `gitlab.com/{group}/kiwi_ridesharing`
-- Then populate it:
-
-```bash
-##   e.g. if group is "{group}" and project_name is "kiwi_ridesharing"
-git remote add origin git@github.com:{group}/kiwi_ridesharing.git
-git push -u origin master
-git push -u origin --tags
 ```
 
 Functionnal test with a script:
