@@ -100,7 +100,7 @@ class Driver:
                 """
         db.execute(query)
 
-        return pd.DataFrame(db.fetchall(), columns=['driver_id', 'days_since_last_ride', 'timestamp'])
+        return pd.DataFrame(db.fetchall(), columns=['driver_id', 'max_consecutive_offline', 'timestamp'])
 
     def get_days_since_last_ride(self):
 
@@ -301,7 +301,6 @@ class Driver:
         # get average monthly revenue per driver
         rides = rides.groupby(["driver_id", rides["dropped_off_at"].dt.month]).sum().reset_index()[["driver_id", "dropped_off_at","kiwi_revenue"]]
         rides_average_monthly = rides.groupby("driver_id").mean().reset_index()[["driver_id","kiwi_revenue"]]
-        print(len(rides_average_monthly))
         lifetime = lifetime.merge(rides_average_monthly, on="driver_id", how="left")[["driver_id", "lifetime", "kiwi_revenue"]]
 
         lifetime["average_lifetime_value"] = (lifetime["lifetime"]/30) * lifetime["kiwi_revenue"]
@@ -321,14 +320,13 @@ class Driver:
 
         """
         Returns a DataFrame with the all following columns:
-        ['ride_id', 'requested_at', 'accepted_at', 'arrived_at', 'picked_up_at',
-        'dropped_off_at', 'ride_duration_minutes', 'ride_duration_hours',
-        'average_speed', 'driver_wait_time', 'customer_wait_time']
-
-        Parameters:
-            clean_data -> bool: indicate whether to replace "arrived_at" timestamp
-            with "picked_up_at" timestamp where "arrived_at" > "picked_up_at" and
-            where "arrived_at" is Null
+        ['driver_id', 'driver_onboard_date', 'first_ride', 'last_ride',
+        'is_churn', 'lifetime', 'max_consecutive_offline', 'timestamp',
+        'last_online', 'ride_count', 'total_distance', 'total_driving_time',
+        'total_earned', 'prime_time_rides', 'average_speed', 'average_waittime',
+        'average_response_time', 'rides_weekday', 'rides_weekend',
+        'lifetime_in_days', 'kiwi_average_monthly_revenue',
+        'average_lifetime_value']
 
         """
 
@@ -360,4 +358,10 @@ class Driver:
                     self.get_lifetime_value()[1], on='driver_id', how="left", suffixes=('', '_DROP')
                 ).filter(regex="^(?!.*DROP)")
 
-        return full_data
+        return full_data[['driver_id', 'driver_onboard_date', 'first_ride', 'last_ride',
+        'is_churn', 'max_consecutive_offline',
+        'last_online', 'ride_count', 'total_distance', 'total_driving_time',
+        'total_earned', 'prime_time_rides', 'average_speed', 'average_waittime',
+        'average_response_time', 'rides_weekday', 'rides_weekend',
+        'lifetime_in_days', 'kiwi_average_monthly_revenue',
+        'average_lifetime_value']]
