@@ -383,4 +383,4 @@ class Driver:
         'total_earned', 'prime_time_rides', 'average_speed', 'average_waittime',
         'average_response_time', 'rides_weekday', 'rides_weekend',
         'lifetime_in_days', 'kiwi_average_monthly_revenue',
-        'average_lifetime_value']]
+        'average_lifetime_value']].dropna()
