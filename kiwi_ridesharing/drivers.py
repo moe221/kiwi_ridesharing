@@ -128,8 +128,11 @@ class Driver:
 
         last_trip = self._get_first_last_trip()
         last_timestamp_in_kiwi_database = self.rides["dropped_off_at"].max()
+
         last_trip["is_churn"] = last_trip["last_ride"].\
         apply(lambda x: 1 if (last_timestamp_in_kiwi_database - x).days >= threshold else 0)
+
+
 
         return last_trip[["driver_id", "driver_onboard_date", "first_ride", "last_ride", "is_churn"]]
 
@@ -214,8 +217,24 @@ class Driver:
         return rides
 
     def get_rides_first_14_days(self):
-        #TODO add function to count number of rides within first 14 days after onboarding
-        pass
+        """
+        function to count number of rides within first 14 days after onboarding
+        """
+        rides = self.rides.copy()
+        rides = rides.merge(self.matching_table, on="ride_id", how="left")[["ride_id", "driver_id", "dropped_off_at"]]
+
+        first_rides = rides.sort_values(by=["driver_id", "dropped_off_at"], ascending=True)
+        first_rides = first_rides.groupby(["driver_id", first_rides["dropped_off_at"].dt.date]).count()[["ride_id"]].reset_index()
+        first_rides['cumulative_rides']=first_rides.groupby('driver_id')['ride_id'].cumsum()
+        first_rides = first_rides.merge(self._get_first_last_trip(), on="driver_id", how="right")[["driver_id", "driver_onboard_date", "dropped_off_at", "cumulative_rides"]]
+        first_rides["days_since_onboarding"] = (pd.to_datetime(first_rides["dropped_off_at"]) - first_rides["driver_onboard_date"]).dt.days
+        first_14_days = first_rides[first_rides["days_since_onboarding"] <= 14].sort_values(["driver_id", "dropped_off_at"], ascending=False).drop_duplicates("driver_id",keep="first")
+        first_14_days = first_14_days[["driver_id", "cumulative_rides"]]
+        first_14_days = first_14_days.merge(self._get_first_last_trip(), on="driver_id", how="right")[["driver_id", "cumulative_rides"]].fillna(0)
+
+        first_14_days.columns = ["driver_id", "rides_first_14_days"]
+
+        return first_14_days
 
     def get_average_speed(self):
         """
