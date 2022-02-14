@@ -15,7 +15,12 @@ flake8
 pytest
 yapf
 
-# API
+# machine learning
+sklearn
+statsmodels
+imblearn
 
-
-# utilities
+#data vis
+plotly
+cufflinks
+chart_studio
